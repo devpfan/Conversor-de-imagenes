@@ -23,7 +23,7 @@ class EditorFotos:
         style = ttk.Style()
         style.configure("TButton", padding=6, relief="flat", background="#ccc")
 
-        # Configurar fondo 
+        # Configurar fondo
         frame_superior = tk.Frame(self.root, bg="#333")  # Cambiar el color de fondo
         frame_superior.pack(fill=tk.X)
 
@@ -50,9 +50,32 @@ class EditorFotos:
         self.canvas = tk.Canvas(self.root, background="white", highlightthickness=0)
         self.canvas.pack(expand=tk.YES, fill=tk.BOTH)
 
-        # Asociar eventos del mouse para hacer zoom out
+        # eventos del mouse para hacer el zoom out
         self.canvas.bind("<MouseWheel>", self.zoom)
         self.canvas.bind("<Control-MouseWheel>", self.zoom)
+
+    def cargar_imagen(self):
+        ruta_archivo = filedialog.askopenfilename()
+
+        self.imagen_original = Image.open(ruta_archivo)
+        self.imagen_procesada = self.imagen_original.copy() # para mantener la imagen original sin cambios
+
+        self.mostrar_imagen()
+
+    def redimensionar_imagen(self):
+        if self.imagen_original is not None:
+            confirmacion = tk.messagebox.askyesno("Confirmar","Desea cambiar el tamaño de la imagen")
+            if confirmacion:
+                nueva_ancho = 300
+                relacion_aspecto = self.imagen_original.width / self.imagen_original.height
+                nueva_altura = int(nueva_ancho / relacion_aspecto)
+
+                self.imagen_procesada = self.imagen_original.resize((nueva_ancho, nueva_altura), Image.LANCZOS)
+
+                # reestablece el zoom al predeterminado despues de cambiar el tamaño
+                self.factor_zoom = 1.0
+
+                self.mostrar_imagen()
 
 
 if __name__ == "__main__":
