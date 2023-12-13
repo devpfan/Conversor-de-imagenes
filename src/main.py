@@ -4,12 +4,15 @@ from tkinter import ttk, filedialog, messagebox
 from PIL import Image, ImageTk
 
 
+
 class EditorFotos:
     def __init__(self, root):
         self.root = root
         self.root.title("Editor v0.1b")
 
-        self.root.iconbitmap(os.path.join(os.path.dirname(__file__), "tijera.ico"))
+        # self.root.iconbitmap(os.path.join(os.path.dirname(__file__), "src", "img", "tijera.ico"))
+
+
 
         self.imagen_original = None
         self.imagen_procesada = None
@@ -58,13 +61,13 @@ class EditorFotos:
         ruta_archivo = filedialog.askopenfilename()
 
         self.imagen_original = Image.open(ruta_archivo)
-        self.imagen_procesada = self.imagen_original.copy() # para mantener la imagen original sin cambios
+        self.imagen_procesada = self.imagen_original.copy()  # para mantener la imagen original sin cambios
 
         self.mostrar_imagen()
 
     def redimensionar_imagen(self):
         if self.imagen_original is not None:
-            confirmacion = tk.messagebox.askyesno("Confirmar","Desea cambiar el tamaño de la imagen")
+            confirmacion = tk.messagebox.askyesno("Confirmar", "Desea cambiar el tamaño de la imagen")
             if confirmacion:
                 nueva_ancho = 300
                 relacion_aspecto = self.imagen_original.width / self.imagen_original.height
@@ -77,7 +80,7 @@ class EditorFotos:
 
                 self.mostrar_imagen()
 
-    def zoom (self, evento):
+    def zoom(self, evento):
         direccion_zoom = -1 if evento.delta < 0 else 1
         self.factor_zoom *= 1.2 ** direccion_zoom
 
@@ -103,7 +106,7 @@ class EditorFotos:
     def guardar_imagen(self):
         if self.imagen_procesada is not None:
             ruta_guardar = filedialog.asksaveasfilename(defaultextension=".png", filetypes=[("Archivos PNG", "*.png"), (
-            "Todos los archivos", "*.*")])
+                "Todos los archivos", "*.*")])
 
             if ruta_guardar:
                 self.imagen_procesada.save(ruta_guardar)
