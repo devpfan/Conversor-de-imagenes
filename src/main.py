@@ -77,6 +77,51 @@ class EditorFotos:
 
                 self.mostrar_imagen()
 
+    def zoom (self, evento):
+        direccion_zoom = -1 if evento.delta < 0 else 1
+        self.factor_zoom *= 1.2 ** direccion_zoom
+
+        # Aplica el zoom a la imagen original
+        ancho_zoom = int(self.imagen_original.width * self.factor_zoom)
+        altura_zoom = int(self.imagen_original.height * self.factor_zoom)
+        self.imagen_procesada = self.imagen_original.resize((ancho_zoom, altura_zoom), Image.LANCZOS)
+
+        # Mostrar la imagen con el nuevo zoom
+        self.mostrar_imagen()
+
+    def mostrar_imagen(self):
+        # Borrar contenido existente
+        self.canvas.delete("all")
+
+        if self.imagen_procesada is not None:
+            # Convierte la imagen para verla en Tkinter
+            self.img_tk = ImageTk.PhotoImage(self.imagen_procesada)
+
+            # Mostrar la imagen
+            self.canvas.create_image(0, 0, anchor=tk.NW, image=self.img_tk)
+
+    def guardar_imagen(self):
+        if self.imagen_procesada is not None:
+            ruta_guardar = filedialog.asksaveasfilename(defaultextension=".png", filetypes=[("Archivos PNG", "*.png"), (
+            "Todos los archivos", "*.*")])
+
+            if ruta_guardar:
+                self.imagen_procesada.save(ruta_guardar)
+                messagebox.showinfo("Información", "Imagen guardada correctamente.")
+
+    def mostrar_acerca_de(self):
+        ventana_acerca_de = tk.Toplevel(self.root)
+        ventana_acerca_de.title("Acerca de")
+
+        etiqueta_version = tk.Label(ventana_acerca_de, text="Versión 0.2b")
+        etiqueta_version.pack(pady=10)
+
+        etiqueta_autor = tk.Label(ventana_acerca_de, text="Autor: Paulo Martinez ")
+        etiqueta_autor.pack(pady=5)
+
+        etiqueta_derechos = tk.Label(ventana_acerca_de, text="© 2023 - Github: devpfan")
+        etiqueta_derechos.pack(pady=5)
+
 
 if __name__ == "__main__":
     root = tk.Tk()
