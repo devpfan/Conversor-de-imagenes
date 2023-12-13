@@ -10,7 +10,7 @@ class EditorFotos:
         self.root = root
         self.root.title("Editor v0.1b")
 
-        # self.root.iconbitmap(os.path.join(os.path.dirname(__file__), "src", "img", "tijera.ico"))
+        self.root.iconbitmap(os.path.join(os.path.dirname(__file__), "img", "tijera.ico"))
 
 
 
